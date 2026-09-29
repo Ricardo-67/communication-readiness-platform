@@ -4,6 +4,7 @@ import { env } from './config/env';
 import { eventBus } from './shared/events/eventBus';
 import { Events, UserRegisteredPayload } from './shared/events/events';
 import { db } from './shared/db/pool';
+import { registerCreditEventHandlers } from './modules/credits/credits.handlers';
 
 // M1 handler: write audit log on registration (non-blocking)
 eventBus.on(Events.USER_REGISTERED, async (payload: UserRegisteredPayload) => {
@@ -17,6 +18,9 @@ eventBus.on(Events.USER_REGISTERED, async (payload: UserRegisteredPayload) => {
     console.error('[eventBus] USER_REGISTERED handler error:', err);
   }
 });
+
+// M4: Register credit event handlers
+registerCreditEventHandlers();
 
 const server = app.listen(env.PORT, () => {
   console.log(`[backend] http://localhost:${env.PORT}  (${env.NODE_ENV})`);
